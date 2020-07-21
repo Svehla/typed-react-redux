@@ -23,6 +23,8 @@ const delay = (timeout: number) => new Promise(resolve => setTimeout(resolve, ti
 // ---------------
 const INCREMENT = 'INCREMENT' as const
 const DECREMENT = 'DECREMENT' as const
+const MULTIPLY = 'MULTIPLY' as const
+const DIVIDE = 'DIVIDE' as const
 
 const increment = () => ({
   type: INCREMENT,
@@ -32,9 +34,21 @@ const decrement = () => ({
   type: DECREMENT,
 })
 
+const multiply = (multiplyBy: number) => ({
+  type: MULTIPLY,
+  multiplyBy,
+})
+
+const divide = (divideBy: number) => ({
+  type: DIVIDE,
+  divideBy,
+})
+
 type ActionType = 
   | ReturnType<typeof increment>
   | ReturnType<typeof decrement>
+  | ReturnType<typeof multiply>
+  | ReturnType<typeof divide>
 
 type IncrementThunk = ThunkReturnType<ActionType>
 
@@ -42,9 +56,15 @@ type IncrementThunk = ThunkReturnType<ActionType>
 export const asyncIncrement = (timeout: number): IncrementThunk =>
   async (dispatch, _getState) => {
     await delay(timeout)
+    dispatch(multiply(2))
+    await delay(timeout)
     dispatch(increment())
     await delay(timeout)
     dispatch(increment())
+    await delay(timeout)
+    dispatch(multiply(5))
+    await delay(timeout)
+    dispatch(divide(7))
   };
   
   
@@ -59,6 +79,10 @@ function counter(state = defaultState, action: ActionType): State {
       return { ...state, value: state.value + 1 }
     case DECREMENT:
       return { ...state, value: state.value - 1 }
+    case MULTIPLY:
+      return { ...state, value: state.value * action.multiplyBy }
+    case DIVIDE:
+      return { ...state, value: state.value / action.divideBy }
     default:
       return state
   }
@@ -92,14 +116,13 @@ const Counter = () => {
   const dispatch = useDispatch()
   const counterValue = useSelector(getCounterValue)
 
-  const increment = () => { dispatch(increment()) }
-  const decrement = () => { dispatch(decrement()) }
-
   return (
     <div>
-      {counterValue}
-      <button onClick={increment}>+</button>
-      <button onClick={decrement}>-</button>
+      <div>
+        {counterValue}
+      </div>
+      <button onClick={() => { dispatch(increment()) }}>+</button>
+      <button onClick={() => { dispatch(decrement()) }}>-</button>
       <button onClick={() => { dispatch(asyncIncrement(200))}}>make 200ms async increment</button>
       <button onClick={() => { dispatch(asyncIncrement(400))}}>make 400ms async increment</button>
       <button onClick={() => { dispatch(asyncIncrement(800))}}>make 800ms async increment</button>
