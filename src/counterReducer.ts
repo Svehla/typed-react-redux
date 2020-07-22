@@ -1,14 +1,14 @@
-import { ThunkReturnType } from './helperTypes';
+import { ThunkReturnType } from './reduxHelperTypes';
 
 const MULTIPLY = 'counter/MULTIPLY' as const
 const DIVIDE = 'counter/DIVIDE' as const
 
-const multiply = (multiplyBy: number) => ({
+export const multiply = (multiplyBy: number) => ({
   type: MULTIPLY,
   multiplyBy,
 })
 
-const divide = (divideBy: number) => ({
+export const divide = (divideBy: number) => ({
   type: DIVIDE,
   divideBy,
 })
@@ -17,12 +17,12 @@ type ActionType =
   | ReturnType<typeof multiply>
   | ReturnType<typeof divide>
 
-type CounterThunk = ThunkReturnType<ActionType>
 
 const delay = (timeout: number) => 
   new Promise(resolve => setTimeout(resolve, timeout))
 
-export const asyncValueChange = (timeout: number): CounterThunk =>
+
+export const asyncValueChange = (timeout: number): ThunkReturnType =>
   async (dispatch, _getState) => {
     await delay(timeout)
     dispatch(multiply(2))
@@ -33,8 +33,10 @@ export const asyncValueChange = (timeout: number): CounterThunk =>
     dispatch(divide(7))
   };
   
+
+
 const defaultState = {
-  value: 0
+  value: 10
 }
 
 type State = typeof defaultState
