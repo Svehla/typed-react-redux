@@ -1,4 +1,5 @@
 import { ThunkReturnType } from './reduxHelperTypes';
+import { delay } from './utils';
 
 
 export const multiply = (multiplyBy: number) => ({
@@ -14,9 +15,6 @@ export const divide = (divideBy: number) => ({
 type ActionType = 
   | ReturnType<typeof multiply>
   | ReturnType<typeof divide>
-
-const delay = (timeout: number) => 
-  new Promise(resolve => setTimeout(resolve, timeout))
 
 export const asyncValueChange = (timeout: number): ThunkReturnType =>
   async (dispatch, _getState) => {

@@ -1,9 +1,18 @@
-// no user is not defined in the app 
-// so we have to write User shape ts type by hands
-type User = {
-  id: string
-  name: string
+import { delay } from "./utils"
+import { Await, ArrayItem, RecursivePartial } from "./helperTypes"
+
+// -------- service layer starts ----------
+const fetchUsersFromServer = async () => {
+  await delay(100)
+  // local mock data
+  return [
+    { id: 'uniq-1', name: 'Foo' },
+    { id: 'uniq-2', name: 'Bar' },
+    { id: 'uniq-3', name: 'Baz' },
+  ]
 }
+
+// --------- service layer ends -----------
 
 const addUser = (user: User) => ({
   type: 'users/ADD_USER' as const,
@@ -29,6 +38,8 @@ type ActionType =
   | ReturnType<typeof removeUser>
   | ReturnType<typeof addAdmin>
   | ReturnType<typeof removeAdmin>
+
+type User = RecursivePartial<ArrayItem<Await<ReturnType<typeof fetchUsersFromServer>>>>
 
 const defaultState = {
   users: [] as User[],
