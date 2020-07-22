@@ -1,10 +1,3 @@
-
-
-const ADD_USER = 'users/ADD_USER' as const
-const REMOVE_USER = 'users/REMOVE_USER' as const
-const ADD_ADMIN = 'users/ADD_ADMIN' as const
-const REMOVE_ADMIN = 'users/REMOVE_ADMIN' as const
-
 // no user is not defined in the app 
 // so we have to write User shape ts type by hands
 type User = {
@@ -13,23 +6,23 @@ type User = {
 }
 
 const addUser = (user: User) => ({
-  type: ADD_USER,
+  type: 'users/ADD_USER' as const,
   user,
 })
 
 const removeUser = (userId: string) => ({
-  type: REMOVE_USER,
+  type: 'users/REMOVE_USER' as const,
   userId,
 })
 
 const addAdmin = (user: User) => ({
-  type: ADD_ADMIN,
+  type: 'users/ADD_ADMIN' as const,
   user,
 })
 
-const removeAdmin = (userId: string) => ({
-  type: REMOVE_ADMIN,
-  userId,
+const removeAdmin = (adminId: string) => ({
+  type: 'users/REMOVE_ADMIN' as const,
+  adminId,
 })
 type ActionType = 
   | ReturnType<typeof addUser>
@@ -46,19 +39,19 @@ type State = typeof defaultState
 
 export const usersReducer = (state = defaultState, action: ActionType): State => {
   switch (action.type) {
-    case ADD_USER:
+    case 'users/ADD_USER':
       return { ...state, users: [...state.users, action.user] }
-    case REMOVE_USER:
+    case 'users/REMOVE_USER':
       return {
         ...state,
         users: state.users.filter(({ id }) => id !== action.userId)
       }
-    case ADD_ADMIN:
+    case 'users/ADD_ADMIN':
       return { ...state, admins: [...state.users, action.user] }
-    case REMOVE_ADMIN:
+    case 'users/REMOVE_ADMIN':
       return {
         ...state,
-        admins: state.admins.filter(({ id }) => id !== action.userId)
+        admins: state.admins.filter(({ id }) => id !== action.adminId)
       }
     default:
       return state

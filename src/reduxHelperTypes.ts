@@ -25,5 +25,5 @@ export type Get2NestedValuesAsUnion<T> =
 export type GetActionsFromReducer<T> =
   T extends ((...args: any[]) => any)
     ? Parameters<T>[1]
-    : T
+    : never
 

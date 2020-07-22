@@ -24,7 +24,6 @@ export const UIApp = () => {
       <div>
         {counterValue}
       </div>
-      {/* TODO: in the redux component the`dispatch(actionCreator())` has no correct type checking :( */}
       <button onClick={() => { dispatch(asyncValueChange(200))}}>make 200ms async operation</button>
       <button onClick={() => { dispatch(asyncValueChange(400))}}>make 400ms async operation</button>
       <button onClick={() => { dispatch(asyncValueChange(800))}}>make 800ms async operation</button>
