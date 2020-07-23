@@ -1,8 +1,13 @@
 import { AllReduxActions } from './App'
+import { ThunkReturnType } from './reduxHelperTypes'
+
+
 
 declare module 'react-redux' {
-  type UnspecificReduxThunkAction = (...arg: any[]) => any
   export function useDispatch(): (
-    arg: AllReduxActions | UnspecificReduxThunkAction
-  ) => Promise<any>
+    arg: AllReduxActions | ThunkReturnType
+  ) => Promise<unknown> | unknown
 }
+
+
+
