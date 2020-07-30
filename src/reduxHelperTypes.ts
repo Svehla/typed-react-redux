@@ -1,10 +1,16 @@
 import { GlobalState, AllReduxActions } from "./App"
 
-export type ThunkReturnType<R = Promise<unknown> | unknown, ExtraArgument = any> =(
-  dispatch: <T = Promise<unknown> | unknown>(a: AllReduxActions | ThunkReturnType) => T,
+export type ThunkReturnType<
+  R = Promise<unknown> | unknown,
+  ExtraArgument = any
+> =(
+  dispatch: <T = Promise<unknown> | unknown>(
+    a: AllReduxActions | ThunkReturnType
+  ) => T,
   getState: () => GlobalState,
   extraArgument: ExtraArgument
 ) => R 
+
 
 export type GetStateFromReducers<
   T extends ((...args: any[]) => any) | { [key: string]: any }
