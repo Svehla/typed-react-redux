@@ -1,8 +1,7 @@
 import { GlobalState, AllReduxActions } from "./App"
-import { ThunkDispatch } from "redux-thunk";
 
 export type ThunkReturnType<R = Promise<unknown> | unknown, ExtraArgument = any> =(
-  dispatch: ThunkDispatch<GlobalState, void, AllReduxActions>,
+  dispatch: <T = Promise<unknown> | unknown>(a: AllReduxActions | ThunkReturnType) => T,
   getState: () => GlobalState,
   extraArgument: ExtraArgument
 ) => R 
