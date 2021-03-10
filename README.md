@@ -301,7 +301,7 @@ export type GetAllReduxActions<T> = T extends (state: any, actions: infer Action
   ? keyof Actions extends []
     ? never
     : Actions
-  : T extends Record<any, infer Values>
+  : T extends Record<string, infer Values>
   ? GetAllReduxActions<Values>
   : never
 
