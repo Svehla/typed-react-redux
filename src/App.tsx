@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import { combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import { counterReducer } from './counterReducer'
-import { GetStateFromReducers, GetActionsFromReducer, Get2NestedValuesAsUnion } from './reduxHelperTypes';
+import { GetStateFromReducers, GetAllReduxActions } from './reduxHelperTypes';
 import { UIApp } from './UIApp';
 import { usersReducer } from './usersReducer';
 
@@ -18,10 +18,8 @@ const reducers = {
   }),
 };
 
+export type AllReduxActions = GetAllReduxActions<typeof reducers>
 export type GlobalState = GetStateFromReducers<typeof reducers>
-export type AllReduxActions = GetActionsFromReducer<
-  Get2NestedValuesAsUnion<typeof reducers>
->
 
 let store = createStore(combineReducers(reducers), applyMiddleware(thunk))
 

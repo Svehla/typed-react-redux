@@ -12,23 +12,20 @@ export type ThunkReturnType<
 ) => R 
 
 
-export type GetStateFromReducers<
-  T extends ((...args: any[]) => any) | { [key: string]: any }
-> = {
-  [K in keyof T]: T[K] extends ((...args: any[]) => any)
-    ? ReturnType<T[K]>
-    : GetStateFromReducers<T[K]>
-}
+export type GetStateFromReducers<T> =
+  T extends (...args: any[]) => infer Ret
+  ? Ret
+  : T extends Record<any, any>
+  ? {
+      [K in keyof T]: GetStateFromReducers<T[K]>
+    }
+  : T
 
-export type Get2NestedValuesAsUnion<T> =
-  T extends ({ [s: string]: infer ValNest1 })
-    ? ValNest1 extends ({ [s: string]: infer ValNest2 })
-      ? ValNest2
-      : ValNest1
-    : T
-
-export type GetActionsFromReducer<T> =
-  T extends ((...args: any[]) => any)
-    ? Parameters<T>[1]
-    : never
-
+export type GetAllReduxActions<T> = T extends (state: any, actions: infer Actions, ...args: any[]) => any
+  // omit empty objects like `{}`
+  ? keyof Actions extends []
+    ? never
+    : Actions
+  : T extends Record<any, infer Values>
+  ? GetAllReduxActions<Values>
+  : never
