@@ -11,7 +11,6 @@ export type ThunkReturnType<
   extraArgument: ExtraArgument
 ) => R 
 
-
 export type GetStateFromReducers<T> =
   T extends (...args: any[]) => infer Ret
   ? Ret
@@ -29,3 +28,10 @@ export type GetAllReduxActions<T> = T extends (state: any, actions: infer Action
   : T extends Record<string, infer Values>
   ? GetAllReduxActions<Values>
   : never
+
+// -------------------------- Redux action type type as string validation -----------------------------------
+// static type err thrower which check that you don't forget to ad `as const` into your redux action type name
+type ThrowErrIfReduxActionTypeIsInvalid<U extends AllReduxActions['type']> = U
+// @ts-expect-error if this throw error you have probably error in your reduck code and you forget to add as const notation
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type _TestAsConstForActionName = ThrowErrIfReduxActionTypeIsInvalid<'hey bro! you probably forget to add `as const` notation into your reduck file'>
