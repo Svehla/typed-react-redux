@@ -1,15 +1,13 @@
 
-// inspiration https://stackoverflow.com/a/57364353
-export type Await<T> = T extends {
-  then(onfulfilled?: (value: infer U) => unknown): unknown;
-} ? U : T;
+export type Await<T> = T extends Promise<infer Value> 
+  ? Value
+  : never
 
-// inspiration: https://stackoverflow.com/a/51365037
-export type RecursivePartial<T> = 
-T extends (infer Item)[]
-  ? RecursivePartial<Item>[] | undefined
-  : T extends Record<string, any>
-  ? { [P in keyof T]?: RecursivePartial<T[P]> }
-  : T
+export type DeepPartial<T> = T extends Record<string, any>
+  ? {
+    [Key in keyof T]?: DeepPartial<T[Key]>
+  }
+  : T extends (infer Item)[]
+    ? DeepPartial<Item>[] | undefined
+  : T | undefined
 
-export type ArrayItem<T> = T extends (infer U)[] ? U : T;

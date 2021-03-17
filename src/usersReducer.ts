@@ -1,5 +1,5 @@
 import { delay } from "./utils"
-import { Await, ArrayItem, RecursivePartial } from "./helperTypes"
+import { Await, DeepPartial } from "./helperTypes"
 
 // -------- service layer starts ----------
 const fetchUsersFromServer = async () => {
@@ -39,7 +39,7 @@ type ActionType =
   | ReturnType<typeof addAdmin>
   | ReturnType<typeof removeAdmin>
 
-type User = RecursivePartial<ArrayItem<Await<ReturnType<typeof fetchUsersFromServer>>>>
+type User = DeepPartial<Await<ReturnType<typeof fetchUsersFromServer>>[number]>
 
 const defaultState = {
   users: [] as User[],
