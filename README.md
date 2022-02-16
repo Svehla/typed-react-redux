@@ -22,7 +22,7 @@ export type GlobalState = GetStateFromReducers<typeof reducers>
 ```
 
 
-![Alt Text](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/6wsctkq60t9l8rao15uz.png)
+![Preview 1](https://raw.githubusercontent.com/Svehla/typed-react-redux/master/imgs/preview-1.png)
 
 
 ### Inferred union of all possible redux actions
@@ -39,7 +39,7 @@ export type AllReduxActions = GetAllReduxActions<typeof reducers>
 
 ```
 
-![Alt Text](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/xwdrtvq7dkg5ooqyiunk.png)
+![get all redux actions](https://raw.githubusercontent.com/Svehla/typed-react-redux/master/imgs/getAllReduxActions.png)
 
 
 ### Inferred returned value of selectors
@@ -49,18 +49,18 @@ export type AllReduxActions = GetAllReduxActions<typeof reducers>
 const getCounterValue = (state: GlobalState) => state.helpers.counter.value
 ```
 
-![Alt Text](https://dev-to-uploads.s3.amazonaws.com/i/c2pn6itys4bkq7puqujs.png)
+![get coutner value](https://raw.githubusercontent.com/Svehla/typed-react-redux/master/imgs/getCounterValue.png)
 
 
 ```typescript
 const counterValue = useSelector(getCounterValue)
 ```
 
-![Alt Text](https://dev-to-uploads.s3.amazonaws.com/i/tagtexn9atfyi5y9l7vq.png)
+![Counter value](https://raw.githubusercontent.com/Svehla/typed-react-redux/master/imgs/counterValue.png)
 
 
 ### Inferred nested action payload by action type inside of reducer switch-case
-![Alt Text](https://dev-to-uploads.s3.amazonaws.com/i/mdywcffm94ndzb1hh48i.gif)
+![counter reducer](https://raw.githubusercontent.com/Svehla/typed-react-redux/master/imgs/counter-reducer.gif)
 
 You can find the full redux-typescript app in my GitHub repository:
 https://github.com/Svehla/redux-ts-preview
@@ -88,13 +88,13 @@ Let’s have a look at Redux architecture. There are some `middlewares`, `reduce
 
 In the diagram below we have the basic Redux data flow.
 
-![Alt Text](https://dev-to-uploads.s3.amazonaws.com/i/4awbljx5dbwgy11zccna.jpg)
+![redux flow](https://raw.githubusercontent.com/Svehla/typed-react-redux/master/imgs/redux-flow.jpeg)
 
 Data flow is simple and straightforward, which is awesome right?
 
 So let’s have a look at another diagram, which shows the basics of Javascript source code relations with the usage of Redux.
 
-![Alt Text](https://dev-to-uploads.s3.amazonaws.com/i/oq9uhy2d2ytoljwdbm58.png)
+![redux flow](https://raw.githubusercontent.com/Svehla/typed-react-redux/master/imgs/redux-flow-2.png)
 
 Redux forces you to write a lot of small functions that are all merged together in the heart of the Redux library, so it’s hard to do static-analyses and find relations between these pieces of abstractions
 
@@ -168,7 +168,8 @@ const defaultState = {
 }
 type State = typeof defaultState
 ```
-![Alt Text](https://dev-to-uploads.s3.amazonaws.com/i/892fxfe73yxl6b0t6tgm.png)
+
+![default state](https://raw.githubusercontent.com/Svehla/typed-react-redux/master/imgs/defaultState.png)
 
 As you can see it’s no big deal to infer a static type for the whole reducer state by using a single `typeof` keyword. There is a bottleneck if a default value does not describe the whole data type and Typescript can’t infer it correctly. For example an empty array. If you write an empty array you have no idea what data types will be inside of the array. For this kind of case, we will help the typescript-compiler by using the `as` keyword for specifying the type correctly as in the example below.
 
@@ -201,7 +202,7 @@ function counter(state = defaultState, action) {
 
 Adding Typescript to the reducer is simple. We will just connect reducers arguments with already created Typescript inferred State type and an `ActionType` enum with all reducers actions.
 
-![Alt Text](https://dev-to-uploads.s3.amazonaws.com/i/mdywcffm94ndzb1hh48i.gif)
+![counter reducer](https://raw.githubusercontent.com/Svehla/typed-react-redux/master/imgs/counter-reducer-gif.gif)
 
 You can see that `switch-case` pattern matching started to magically infer a data type from the return value of the action creator function.
 
@@ -245,7 +246,7 @@ export type GlobalState = GetStateFromReducers<typeof reducers>
 ```
 
 
-![Alt Text](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/6wsctkq60t9l8rao15uz.png)
+![Global state](https://raw.githubusercontent.com/Svehla/typed-react-redux/master/imgs/globalState.png)
 
 
 If you add a new reducer into the Javascript implementation, Typescript automatically infers a new global state. So there are no duplicates of writing **interfaces** and **implementation** because everything is automatically inferred.
@@ -258,7 +259,7 @@ Redux selector is a small function that takes global Redux state and picks some 
 const getCounterValue = (state: GlobalState) => state.helpers.counter.value
 ```
 
-![Alt Text](https://dev-to-uploads.s3.amazonaws.com/i/c2pn6itys4bkq7puqujs.png)
+![Get counter value](https://raw.githubusercontent.com/Svehla/typed-react-redux/master/imgs/getCounterValue.png)
 
 Now we connect the created selector to the React component by the `useSelector` hook.
 
@@ -266,7 +267,8 @@ Now we connect the created selector to the React component by the `useSelector` 
 const counterValue = useSelector(getCounterValue)
 ```
 
-![Alt Text](https://dev-to-uploads.s3.amazonaws.com/i/tagtexn9atfyi5y9l7vq.png)
+
+![Counter value](https://raw.githubusercontent.com/Svehla/typed-react-redux/master/imgs/counterValue.png)
 
 ### Typescript connections preview
 
@@ -289,7 +291,7 @@ It means that type inferring is much more valuable than just type interfaces wri
 
 You already created all redux actions so we’re gonna connect them with React Component. In pure React Javascript, code will be similar to this one.
 
-![Alt Text](https://dev-to-uploads.s3.amazonaws.com/i/gauujokdow5z4s2xhggm.png)
+![React component](https://raw.githubusercontent.com/Svehla/typed-react-redux/master/imgs/react-component.png)
 
 We use the `useDispatch` hook to get `dispatch` function. `dispatch` takes action object which is created by our action creators (later in this chapter you will find out that you can pass also redux-thunk function). We want to create a union type for all possible Redux actions. We already combined all reducers together by combineReducer. So we will just take a second argument (action) of all reducers and get a union type for all of them.
 
@@ -321,9 +323,9 @@ const reducers = {
 export type AllReduxActions = GetAllReduxActions<typeof reducers>
 
 ```
-![Alt Text](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/xwdrtvq7dkg5ooqyiunk.png)
+![All Redux Actions](https://raw.githubusercontent.com/Svehla/typed-react-redux/master/imgs/allReduxActions.png)
 
-![Alt Text](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/vapqjnvjsh58mndpberm.png)
+![Redux action types](https://raw.githubusercontent.com/Svehla/typed-react-redux/master/imgs/reduxActionTypes.png)
 
 The last step is to re-declare a global data type for `react-redux` library and connect created `AllReduxActions` type to the `useDispatch` hook.
 
@@ -344,7 +346,7 @@ declare module 'react-redux' {
 
 We already defined all necessary pieces and we’re able to use `useDispatch` with a correctly typed all actions argument.
 
-![Alt Text](https://dev-to-uploads.s3.amazonaws.com/i/mp5snswb4ixmq39t5l20.png)
+![Alt Text](https://raw.githubusercontent.com/Svehla/typed-react-redux/master/imgs/dispatch.png)
 
 **arg arguments contain all users/ and count/ actions but this union type is too large to be in one screenshot*
 
@@ -372,7 +374,7 @@ export const asyncValueChange = (timeout) =>
 ```
 
 
-![Alt Text](https://dev-to-uploads.s3.amazonaws.com/i/34hcqw6iznasjq19vvi6.png)
+![Alt Text](https://raw.githubusercontent.com/Svehla/typed-react-redux/master/imgs/thunk.png)
 
 It would be a lot of work to write types for each function argument. Because of that, we created another `util` generic calledThunkReturnType which adds static types for the whole thunk function. The definition is relatively simple.
 
@@ -393,7 +395,7 @@ export type ThunkReturnType<
 
 Our final `async` thunk function is almost the same as the previous one written in pure Javascript. We just add `ThunkReturnType` static type for the returned `async` function.
 
-![Alt Text](https://dev-to-uploads.s3.amazonaws.com/i/9pzdyribu6t2yljonfe6.gif)
+![Thunk infer type](https://raw.githubusercontent.com/Svehla/typed-react-redux/master/imgs/thunk-infer-type.gif)
 
 Now you connected Javascript React Redux App with 100% type-safe Typescript types.
 
@@ -411,7 +413,7 @@ We learned how to use advanced Typescript types and skip redundant static-type d
 
 In the diagram below we can see that all functions related to Redux have statically analyzed connections with the rest of the code. And we can use that feature to make consistent APIs between objects and redux functions.
 
-![Alt Text](https://dev-to-uploads.s3.amazonaws.com/i/6m9miti6pcaxrozo794l.png)
+![new redux architecture](https://raw.githubusercontent.com/Svehla/typed-react-redux/master/imgs/new-redux-architecture.png)
 
 *Diagram Legend*:
 **Blue lines** — Typescript— **the connections “glue” of functions and objects
