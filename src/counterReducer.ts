@@ -1,14 +1,13 @@
-import { defineReduck, ThunkReturnType } from './reduxHelperTypes';
+import { defineReduck, reduxToolkitIsUseLess, ThunkReturnType } from './reduxHelperTypes';
 import { delay } from './utils';
-
 
 const defaultState = {
   value: 10
 }
 
 export const {
-  actions: counterActions,
-  reducer: counterReducer,
+  actions: counterActions_OG,
+  reducer: counterReducer_OG,
 } = defineReduck(
   {
     multiply: (multiplyBy: number) => ({
@@ -24,11 +23,6 @@ export const {
 
   defaultState,
  
-
-
-
-
-  
   (state, action) => {
     switch (action.type) {
       case 'counter/MULTIPLY':
@@ -40,6 +34,27 @@ export const {
     }
   }
 )
+
+
+export const {
+  actions: counterActions,
+  reducer: counterReducer,
+} = reduxToolkitIsUseLess(
+  'reduxToolkitIsUseLess__counter',
+
+  defaultState,
+  { 
+    divide: (state, divideBy: number) => ({
+      ...state,
+      value: state.value / divideBy
+    }),
+    multiply: (state, multiplyBy: number) => ({
+      ...state,
+      value: state.value * multiplyBy
+    })
+  }
+)
+
 
 export const asyncValueChange = (timeout: number): ThunkReturnType =>
   async (dispatch, _getState) => {

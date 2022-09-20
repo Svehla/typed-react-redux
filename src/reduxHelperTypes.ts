@@ -50,5 +50,41 @@ export const defineReduck = <S, A extends Record<string, (...args: any) => any>>
   reducer: (state: S = defaultState, actions: GetActions<A>) => reducer(state, actions),
 })
 
-
 export const createIdentitySelectors = <T extends Record<string, (s: GlobalState) => any>>(a: T) => a
+
+// redux toolkit is useless shit example:
+// TODO: check that action name does not include slash in the key name
+export const reduxToolkitIsUseLess = <T extends string, S, K extends string, H extends Record<K, (state: S, payload: any) => S>>(
+  uniqKey: T,
+  defaultState: S,
+  handlers: H
+) => {
+  const actionCreators = Object.fromEntries(Object.keys(handlers)
+    .map(k => [k, (payload: any) => ({ type: `${uniqKey}/${k}`, payload })])) as // @ts-expect-error
+    { [K in keyof H]: (payload: Parameters<H[K]>[1]) => ({ type: `${T}/${K}`, payload: Parameters<H[K]>[1] }) }
+  const genericReducer = (state: S, action: any) => handlers[action.type.split('/').at(-1) as keyof H]?.(state, action.payload) ?? state
+  return defineReduck(actionCreators, defaultState, genericReducer)
+}
+
+
+/*
+// support for multiple arguments in the action creators
+
+type OmitFirst <T> = T extends [infer F, ...infer Rest] ? Rest : never
+
+// redux toolkit is useless shit example:
+// TODO: check that action name does not include slash in the key name
+export const reduxToolkitIsUseLess = <T extends string, S, K extends string, H extends Record<K, (state: S, ...payload: any[]) => S>>(
+  uniqKey: T,
+  defaultState: S,
+  handlers: H
+) => {
+  // @ts-expect-error
+  const actionCreators = Object.fromEntries(Object.keys(handlers)
+    .map(k => [k, (...payload: any[]) => ({ type: `${uniqKey}/${k}`, payload })])) as 
+    // @ts-expect-error
+    { [K in keyof H]: (...payloads: OmitFirst<Parameters<H[K]>>) => ({ type: `${T}/${K}`, payload: OmitFirst<Parameters<H[K]>> }) }
+  const genericReducer = (state: S, action: any) => handlers[action.type.split('/').at(-1) as keyof H]?.(state, ...action.payload) ?? state
+  return defineReduck(actionCreators, defaultState, genericReducer)
+}
+*/
