@@ -49,3 +49,6 @@ export const defineReduck = <S, A extends Record<string, (...args: any) => any>>
   // apply default state
   reducer: (state: S = defaultState, actions: GetActions<A>) => reducer(state, actions),
 })
+
+
+export const createIdentitySelectors = <T extends Record<string, (s: GlobalState) => any>>(a: T) => a

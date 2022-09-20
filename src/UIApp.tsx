@@ -1,17 +1,20 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { asyncValueChange, counterActions } from './counterReducer'
-import { GlobalState } from './App';
+import { createIdentitySelectors } from './reduxHelperTypes';
 
-const getCounterValue = (state: GlobalState) => state.helpers.counter.value
-const getAdminsLength = (state: GlobalState) => state.users.admins.length
-const getUsersLength = (state: GlobalState) => state.users.users.length
+const selectors = createIdentitySelectors({
+  getCounterValue: (state) => state.helpers.counter.value,
+  getAdminsLength:  (state) => state.users.admins.length,
+  getUsersLength: (state) => state.users.users.length
+})
 
 export const UIApp = () => {
+
   const dispatch = useDispatch()
-  const counterValue = useSelector(getCounterValue)
-  const adminsLength = useSelector(getAdminsLength)
-  const usersLength = useSelector(getUsersLength)
+  const counterValue = useSelector(selectors.getCounterValue)
+  const adminsLength = useSelector(selectors.getAdminsLength)
+  const usersLength = useSelector(selectors.getUsersLength)
 
   return (
     <div>
@@ -31,3 +34,4 @@ export const UIApp = () => {
     </div>
   )
 }
+
