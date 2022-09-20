@@ -35,3 +35,17 @@ type ThrowErrIfReduxActionTypeIsInvalid<U extends AllReduxActions['type']> = U
 // @ts-expect-error if this throw error you have probably error in your reduck code and you forget to add as const notation
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 type _TestAsConstForActionName = ThrowErrIfReduxActionTypeIsInvalid<'hey bro! you probably forget to add `as const` notation into your reduck file'>
+
+
+// typed thunk abstraction
+export type GetActions <T> = T extends Record<any, (...args: any[]) => infer V> ? V : never
+
+export const defineReduck = <S, A extends Record<string, (...args: any) => any>>(
+  actions: A,
+  defaultState: S,
+  reducer: (state: S, actions: GetActions<A>) => S
+) => ({
+  actions,
+  // apply default state
+  reducer: (state: S = defaultState, actions: GetActions<A>) => reducer(state, actions),
+})

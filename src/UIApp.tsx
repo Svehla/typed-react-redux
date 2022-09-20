@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import { asyncValueChange, divide } from './counterReducer'
+import { asyncValueChange, counterActions } from './counterReducer'
 import { GlobalState } from './App';
 
 const getCounterValue = (state: GlobalState) => state.helpers.counter.value
@@ -27,7 +27,7 @@ export const UIApp = () => {
       <button onClick={() => { dispatch(asyncValueChange(200))}}>make 200ms async operation</button>
       <button onClick={() => { dispatch(asyncValueChange(400))}}>make 400ms async operation</button>
       <button onClick={() => { dispatch(asyncValueChange(800))}}>make 800ms async operation</button>
-      <button onClick={() => { dispatch(divide(5))}}>divide by 5</button>
+      <button onClick={() => { dispatch(counterActions.divide(5))}}>divide by 5</button>
     </div>
   )
 }

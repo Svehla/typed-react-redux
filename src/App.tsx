@@ -21,7 +21,11 @@ const reducers = {
 export type AllReduxActions = GetAllReduxActions<typeof reducers>
 export type GlobalState = GetStateFromReducers<typeof reducers>
 
-let store = createStore(combineReducers(reducers), applyMiddleware(thunk))
+let store = createStore(
+  // @ts-expect-error
+  combineReducers(reducers),
+  applyMiddleware(thunk)
+)
 
 // init whole react app
 export const App = () => (
